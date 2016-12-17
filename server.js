@@ -35,3 +35,4 @@ var stream = fs.createWriteStream('dataLog.txt');
 stream.once('open', function(fd) {
     stream.write("Start of Log\n");
 });
+//Dad you need to fill this out more!
