@@ -7,12 +7,12 @@
 /**
   HUDThermo
    Read local temp, set setpt.
-   
+
     DHT22 pin 1 (left of sensor) connected to +5V
           pin 2 connected to DHTPIN
           pin 4 connected to ground
           connect 10K resistor from pin 2 to pin 1
-          
+
     POT signal pin connected to POTPIN
 
     TFT Display connected to non-SPI pins, should
@@ -74,11 +74,11 @@ void setup() {
   tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
   tft.background(ST7735_BLACK);
   dht.begin();
-  
+
   while (!Serial) {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
-  
+
   pinMode(HEATPIN, OUTPUT);
   pinMode(COOLPIN, OUTPUT);
 
@@ -87,10 +87,10 @@ void setup() {
     Serial.println("Failed to start Ethernet");
   }
   printIP();
-  
+
   pinMode(9, OUTPUT);
   analogWrite(9, 128);
-  
+
   if(!SD.begin(sd_cs)) {
     Serial.println("Card failed, or not present");
   }
@@ -128,13 +128,13 @@ void printValues() {
     tft.setCursor(65,10);
     printNum(TO_LOCAL(gOat), 2); // outside air temp
   }
-  
+
   if(gSetpt != goSetpt) {
     goSetpt = gSetpt;
     tft.setCursor(65,27);
     printNum(TO_LOCAL(gSetpt), 2); // stpt
   }
-  
+
   if(gHum != goHum) {
     goHum = gHum;
     tft.setCursor(65, 44);
@@ -142,13 +142,13 @@ void printValues() {
     tft.setTextSize(2);
     tft.print('%');
   }
-  
+
   if(gTem != goTem) {
     goTem = gTem;
     tft.setCursor(0, 60);
     printNum(TO_LOCAL(gTem), 3); // temp
   }
-  
+
   if(gOcc != goOcc) {
     goOcc = gOcc;
     tft.setCursor(10, 135);
@@ -170,7 +170,7 @@ void update() {
   } else {
     digitalWrite(HEATPIN, LOW);
   }
-  
+
   if((gSetpt-gTemOff) > gTem) {
     digitalWrite(COOLPIN, HIGH);
   } else {
@@ -181,14 +181,14 @@ void update() {
 // record the data
 void record(String s) {
   File dataFile = SD.open("dataLog.txt", FILE_WRITE);
-  
+
   if(dataFile) {
     dataFile.println(s);
     dataFile.close();
   } else {
     Serial.println("Could not open sd card");
   }
-  
+
   Serial.print("Writing to SD: ");
   Serial.println(s);
 }
@@ -223,7 +223,7 @@ void postRecord(String s) {
         //TODO getting setpt from server.
       }
     }
-    
+
     gClient.stop();
   } else {
     Serial.println("Failed going to Ethernet");
@@ -233,17 +233,17 @@ void postRecord(String s) {
 // print number with 3.1 decimals
 void printNum(float f, int s) {
   int i = (int)f;
-  
+
   tft.setTextSize(s);
   if(i < 10) {
     tft.print(' ');
   }
-  
+
   if(i < 100) {
     tft.print(' ');
   }
   tft.print(String(i));
-  
+
   tft.setTextSize(s-1);
   tft.print(String((int)(((f) - (int)f)*10)));
 }
@@ -254,7 +254,7 @@ void printIP() {
   for (byte thisByte = 0; thisByte < 4; thisByte++) {
     // print the value of each byte of the IP address:
     Serial.print(Ethernet.localIP()[thisByte], DEC);
-    Serial.print("."); 
+    Serial.print(".");
   }
   Serial.println();
 }
@@ -268,6 +268,7 @@ String makeString() {
   ret += ",st:";
   ret += (int)(10*gSetpt);
   ret += "}}";
-  
+
   return ret;
 }
+//Dad you need to fill this out more!
